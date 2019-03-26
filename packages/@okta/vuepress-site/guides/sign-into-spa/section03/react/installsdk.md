@@ -1,1 +1,1 @@
-placeholder
+`npm install @okta/okta-react --save`

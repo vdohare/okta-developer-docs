@@ -1,1 +1,1 @@
-placholder
+`npm install @okta/okta-angular --save`
