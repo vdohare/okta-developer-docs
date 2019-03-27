@@ -1,4 +1,7 @@
-In your application's `module.ts` file, import the following objects and create a configuration object. Your application module should provide this config using the OKTA_CONFIG injection token.
+Add OktaAuthModule module to the imports section of your application module's `@NgModule` declaration as shown below.
+
+Your application module should provide a configuration object using the OKTA_CONFIG injection token. This value is required to initialize the OktaAuthService when it is created by the Angular dependency injection system. 
+
 
 ```javascript
 

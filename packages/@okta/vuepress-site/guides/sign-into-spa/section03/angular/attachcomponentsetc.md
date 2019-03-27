@@ -1,37 +1,6 @@
-## Attach Components to Routes
-You need to provide these routes in your sample application so that we can sign the user in and handle the callback from Okta. We show you how to set these up below using [Angular Router](https://angular.io/guide/router):
-
-- `/`: A default home page to handle basic control of the app.
-- `/implicit/callback`: Handle the response from Okta and store the returned tokens.
-
-```javascript
-
-import { Routes, RouterModule } from '@angular/router';
-import {
-  OktaCallbackComponent,
-} from '@okta/okta-angular';
-
-const appRoutes: Routes = [
-  {
-    path: '',
-    component: HomeComponent,
-  },
-  {
-    path: 'implicit/callback',
-    component: OktaCallbackComponent,
-  },
-];
-
-@NgModule({
-  imports: [
-    RouterModule.forRoot(appRoutes),
-  ],
-})
-
-```
 ## Provide the Login and Logout Buttons
 
-In the relevant location in your application, you want to provide `Login` and `Logout` buttons for the user. The oktaAuth service can be injected in your component and you can use the `oktaAuth.isAuthenticated()` method to show/hide the correct button. For example:
+In the relevant location in your application, you want to provide `Login` and `Logout` buttons for the user. The `OktaAuthService` is injected in your component's constructor. You can use the `oktaAuth.isAuthenticated()` method to show/hide the correct button. For example:
 
 ```javascript
 import { Component } from '@angular/core';
@@ -72,21 +41,16 @@ export class AppComponent {
 
 ## Create the Callback Handler
 
-In order to handle the redirect back from Okta, you need to capture the token values from the URL. Use `/implicit/callback` as the callback URL and specify the default `OktaCallbackComponent` and declare it in your `NgModule`.
-
+In order to handle the redirect back from Okta, you need to capture the token values from the callback URL `/implicit/callback` and pass them to the handleAuthentication() method of the OktaAuthService. We have provided `OktaCallbackComponent` which implements this logic.  We show you how to set this up below using [Angular Router](https://angular.io/guide/router):
 
 ```javascript
-
-import { Routes, RouterModule } from '@angular/router';
+//...
 import {
   OktaCallbackComponent,
 } from '@okta/okta-angular';
 
 const appRoutes: Routes = [
-  {
-    path: '',
-    component: HomeComponent,
-  },
+  // ...
   {
     path: 'implicit/callback',
     component: OktaCallbackComponent,
@@ -101,31 +65,3 @@ const appRoutes: Routes = [
 
 ```
 
-## Update Your NgModule
-
-Finally, import the `OktaAuthModule` into your `NgModule` and provide the config object.
-
-```javascript
-
-import {
-  OKTA_CONFIG,
-  OktaAuthModule,
-} from '@okta/okta-angular';
-
-const config = {
-  clientId: '{clientId}',
-  issuer: 'https://{yourOktaDomain}.com/oauth2/default',
-  redirectUri: 'http://localhost:8080/implicit/callback',
-};
-
-@NgModule({
-  imports: [
-    OktaAuthModule,
-  ],
-  providers: [
-    { provide: OKTA_CONFIG, useValue: config },
-  ],
-})
-
-
-```

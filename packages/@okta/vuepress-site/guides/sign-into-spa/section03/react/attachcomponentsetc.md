@@ -1,23 +1,18 @@
 ## Attach Components to the Secure Router
 
-You need to provide these routes in your sample application so that we can sign the user in and handle the callback from Okta. We show you how to set these up below using [React Router DOM](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-dom):
-
-- `/`: A default home page to handle basic control of the app.
-- `/implicit/callback`: This is where auth is handled for you after redirection.
+We provide the `Security` component which makes an Auth object available to child components and the `withAuth` HOC. We show you how to set these up below using [React Router DOM](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-dom):
 
 ```javascript
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Security, ImplicitCallback } from '@okta/okta-react';
-import Home from './Home';
+// import config from ...
 
 class App extends Component {
   render() {
     return (
       <Router>
         <Security {...config} >
-            <Route path="/" exact component={Home} />
-            <Route path="/implicit/callback" component={ImplicitCallback} />
+          { /* child components have access to auth context */ }
         </Security>
       </Router>
     );
@@ -29,11 +24,7 @@ export default App;
 
 ## Provide the Login and Logout Buttons
 
-In the relevant location in your application, you want to provide `Login` and `Logout` buttons for the user. You can show/hide the correct button by using the `auth.isAuthenticated()` method. 
-
-We provide a 'withAuth' Higher-Order-Component which allows child components to access the Auth object.
-
-For example:
+In the relevant location in your application, you want to provide `Login` and `Logout` buttons for the user. You can show/hide the correct button by using the `auth.isAuthenticated()` method.  In this example,`props.auth` has been provided via the `withAuth` HOC.
 
 ```javascript
 
@@ -95,8 +86,27 @@ export default withAuth(class Home extends Component {
 });
 ```
 
-## Update Your App.js
+## Create the Callback Handler
 
-Finally, pass in your configuration into `Security` and connect your application's paths:
+In order to handle the redirect back from Okta, you need to capture the token values from the callback URL `/implicit/callback` and pass them to the handleAuthentication() method of the Auth object. We have provided `ImplicitCallback` which implements this logic. It can be mapped to a route as shown:
 
-{code}
+
+```javascript
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Security, ImplicitCallback } from '@okta/okta-react';
+// import config from ...
+
+class App extends Component {
+  render() {
+    return (
+      <Router>
+        <Security {...config} >
+            <Route path="/implicit/callback" component={ImplicitCallback} />
+        </Security>
+      </Router>
+    );
+  }
+}
+
+```

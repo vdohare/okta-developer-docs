@@ -1,4 +1,4 @@
-For most applications, you will configure and create a Security component in your top-level component, 'App.jsx'. The Security component will create a child context which exposes the Auth object to child components.
+Configure a Security component in your top-level component, 'App.jsx'. The Security component will create a child context which exposes the Auth object to child components.
 
 ```javascript
 
@@ -30,11 +30,9 @@ class App extends Component {
 export default App;
 ```
 
-If your application needs to use or check auth outside of components (for example in Redux actions), you can create the Auth object directly and pass it to the Security component.
+If you find that your application needs to interact with the Auth object outside of a child component context, you can create the Auth object directly and pass it to the Security component as shown below.
 
-Somewhere near the entry point of your application, build an Auth object. This object can be passed to the Security component and used by other areas of your application.
-
-Note that Auth has a dependency on the 'history' npm module.
+Note that Auth has a dependency on the 'history' npm module. You should create this history object and pass it as a property to the Auth construxtor object as shown:
 
 ```javascript
 
