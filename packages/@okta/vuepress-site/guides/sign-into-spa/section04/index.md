@@ -1,6 +1,7 @@
 ---
 title: Your Okta config object
 ---
+## Redirect to the Sign-in Page
 
 ### Things You Need
 After you create the application, there are two values that you need:

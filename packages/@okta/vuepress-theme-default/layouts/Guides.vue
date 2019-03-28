@@ -12,7 +12,7 @@
           :guide="guide" 
           :lang="lang"
         />
-        <GuidesOverview v-else />
+        <GuidesOverview v-else :featured="featured"/>
       </div>
       <!-- END Page Content -->
     </section>
@@ -23,8 +23,10 @@
 <script>
   import { 
     guideFromHash,
+    makeGuideHash,
     findGuides,
-    findGuideSections
+    findGuideSections,
+    findMainLanguagesOfGuide
   } from '../util/guides';
   export default {
     components: {
@@ -43,6 +45,11 @@
         currentHash: null,
       };    
     },
+    computed: { 
+      featured() { 
+        return this.$frontmatter.featured;
+      },
+    },
     methods: { 
       updateHash() { 
         this.currentHash = window.location.hash = window.location.hash || '';
@@ -54,10 +61,17 @@
     
     watch: {
       currentHash() {
-        const { guide, lang, sectionNum } = guideFromHash(this.currentHash);
+        let { guide, lang, sectionNum } = guideFromHash(this.currentHash);
         const pages = this.$site.pages;
         const sections = findGuideSections({ guide, pages });
         const section = sections[sectionNum-1 || 0];
+
+        if(!lang) { 
+          lang = findMainLanguagesOfGuide({ guide, pages })[0];
+          if(window) { 
+            window.location.hash = makeGuideHash({ guide, lang, sectionNum });
+          }
+        }
 
         this.sections = sections;
         this.section = section;

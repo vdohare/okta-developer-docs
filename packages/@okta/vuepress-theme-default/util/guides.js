@@ -1,19 +1,21 @@
+import { commonify, fancify, iconify, cssForIcon } from './frameworks';
+
 const PATH_LIKE = '(?:([^\/]*)\/?)';
 const FRAGMENTS = '/guides/';
-const DEFAULT_LANG = '-';
+const DEFAULT_FRAMEWORK = '-'; 
 const DEFAULT_SECTION = 1;
 
 export const guideFromHash = hash => {
   const parts = {};
 
   [, parts.guide, parts.lang, parts.sectionNum] = hash.match(`#${PATH_LIKE}${PATH_LIKE}${PATH_LIKE}`) || [];
-  parts.lang = parts.lang === DEFAULT_LANG ? '' : parts.lang; // Drop useless default
+  parts.lang = parts.lang === DEFAULT_FRAMEWORK ? '' : parts.lang; // Drop useless default
   parts.sectionNum = parts.sectionNum || DEFAULT_SECTION; // default is useable here
   return parts;
 };
 
 export const makeGuideHash = ({ guide, lang, sectionNum }) => {
-  return `#${guide}/${lang || DEFAULT_LANG}/${sectionNum || DEFAULT_SECTION}`;
+  return `#${guide}/${lang || DEFAULT_FRAMEWORK}/${sectionNum || DEFAULT_SECTION}`;
 };
 
 export const alphaSortBy = prop => (a,b) => a[prop] > b[prop] ? 1 : a[prop] < b[prop] ? -1 : 0;
@@ -36,10 +38,12 @@ export const findGuides = ({ pages }) => {
   return pages.filter( page => page.regularPath.match(section) )
     .map( page => { 
       const name = page.regularPath.match(section)[1];
+      const lang = findMainLanguagesOfGuide({ guide: name, pages })[0];
       return { 
         name,
         title: page.frontmatter.title || name,
-        link: makeGuideHash({ guide: name }),
+        excerpt: page.frontmatter.excerpt || '',
+        link: makeGuideHash({ guide: name, lang }),
         key: page.key,
         page
       };
@@ -55,9 +59,14 @@ export const findStackSnippets = ({ section, snippet, pages }) => {
     .filter( page => page.regularPath.match(prefix) )
     .map( page => {
       const lang = page.regularPath.match(prefix)[1];
+      const name = commonify(lang);
+      const title = fancify(name);
       return { 
         lang,
-        name: lang,
+        name, 
+        title,
+        icon: iconify(name),
+        css: cssForIcon(name),
         link: makeGuideHash({ guide: section.guide, lang, sectionNum: section.sectionNum }),
         key: page.key,
         page
@@ -87,3 +96,14 @@ export const findGuideSections = ({ guide, pages }) => {
       };
   });
 }; 
+
+export const findMainLanguagesOfGuide = ({ guide, pages }) => {
+  // Note: assumes sections are all directories named `sectionNN`
+  const prefix = new RegExp(`${FRAGMENTS}${guide}/${PATH_LIKE}${PATH_LIKE}.*?.html$`);
+  return Object.keys( 
+    // Pull all known langages for the given guide, reduce to unique list
+    pages.filter( page => page.regularPath.match(prefix) )
+      .map( page => page.regularPath.match(prefix)[2] )
+      .reduce( (all, lang) => ({ ...all, [lang]: true }), {} )
+  ).sort();
+};
