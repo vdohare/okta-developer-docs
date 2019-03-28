@@ -1,4 +1,25 @@
-Configure a Security component in your top-level component, 'App.jsx'. The Security component will create a child context which exposes the Auth object to child components.
+
+
+```javascript
+import React, { Component } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+class App extends Component {
+  render() {
+    return (
+      <Router>
+        <Security {...config} >
+          { /* child components have access to auth context */ }
+        </Security>
+      </Router>
+    );
+  }
+}
+
+export default App;
+```
+
+Configure a Security component in your top-level component. We provide the `Security` component which makes an Auth object available to child components and the `withAuth` Higher Order Component (HOC). We show you how to set these up below using [React Router DOM](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-dom):
 
 ```javascript
 
