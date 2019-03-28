@@ -1,4 +1,3 @@
-## Create the Callback Handler
 
 In order to handle the redirect back from Okta, you need to capture the token values from the `Login Redirect URI` callback and pass them to the handleAuthentication() method of the Auth object. We have provided `ImplicitCallback` which implements this logic. It can be mapped to a route as shown:
 

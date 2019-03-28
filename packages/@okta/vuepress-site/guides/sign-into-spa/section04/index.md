@@ -1,6 +1,8 @@
 ---
 title: Your Okta config object
 ---
+# Create your Okta config object
+
 ### Things You Need
 After you create the application, there are two values that you need:
 
