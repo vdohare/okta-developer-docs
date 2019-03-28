@@ -1,5 +1,6 @@
 $border-color: #b7bcc0;
 $text-color: #5c6971;
+$title-color: #3d3d3d;
 $action-base: #1662dd;
 $action-dark: #124a94;
 $gray-000: #fafafa;
@@ -16,6 +17,37 @@ $big-spacing: 3rem;
 
 .guides-overview {
   display: flex;
+
+  .overview-content { 
+    width: 100%;
+  }
+}
+
+.featured { 
+  display: flex;
+}
+
+.guide-featured { 
+  border: 1px solid #EBEBEB;
+  border-radius: 5px;
+  margin-right: 20px;
+  padding: 20px;
+  min-height: 150px;
+
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  a { 
+    color: $title-color;
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+  }
+
+  .framework-icon-block { 
+    padding-top: 40px;
+  }
 }
 
 .guides-navigation { 
@@ -40,6 +72,21 @@ $big-spacing: 3rem;
     }
     &.active:before { 
       content: "\f13a"; /* chevron-circle-down per https://fontawesome.com/cheatsheet?from=io*/
+    }
+    &.overview:before { 
+      content: '\2022';
+      display: inline-block;
+      text-align: center;
+      margin-left: -($icon-size);
+      width: $icon-size;
+    }
+    &.overview.active { 
+      font-weight: bold;
+      $indent: 20px;
+      border-bottom: 2px solid black;
+      background-color: #e5edfb;
+      margin-left: -($indent);
+      padding-left: $indent;
     }
   }
 
@@ -139,6 +186,10 @@ $big-spacing: 3rem;
             border: 2px dotted $text-color;
             border-radius: 0;
           }
+        }
+
+        .framework {
+          padding-left: 10px;
         }
       }
     }
