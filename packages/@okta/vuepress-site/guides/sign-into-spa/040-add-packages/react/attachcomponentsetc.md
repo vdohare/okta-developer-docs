@@ -5,7 +5,6 @@ We provide the `Security` component which makes an Auth object available to chil
 ```javascript
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-// import config from ...
 
 class App extends Component {
   render() {

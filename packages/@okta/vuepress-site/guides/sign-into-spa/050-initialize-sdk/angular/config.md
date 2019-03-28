@@ -10,12 +10,6 @@ import {
   OktaAuthModule,
 } from '@okta/okta-angular';
 
-const config = {
-  clientId: '{clientId}',
-  issuer: 'https://{yourOktaDomain}.com/oauth2/default',
-  redirectUri: 'http://localhost:8080/implicit/callback',
-};
-
 @NgModule({
   imports: [
     OktaAuthModule,

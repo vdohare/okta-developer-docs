@@ -7,14 +7,6 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Security } from '@okta/okta-react';
 
-
-const config = {
-  clientId: '{clientId}',
-  issuer: 'https://{yourOktaDomain}.com/oauth2/default',
-  redirectUri: 'http://localhost:8080/implicit/callback',
-};
-
-
 class App extends Component {
   render() {
     return (
@@ -38,12 +30,6 @@ Note that Auth has a dependency on the 'history' npm module. You should create t
 
 import { Auth } from '@okta/okta-react';
 import createHistory from 'history/createBrowserHistory';
-
-const config = {
-  clientId: '{clientId}',
-  issuer: 'https://{yourOktaDomain}.com/oauth2/default',
-  redirectUri: 'http://localhost:8080/implicit/callback',
-};
 
 const auth = new Auth({
   history,

@@ -1,1 +1,0 @@
-`npm install @okta/okta-angular --save`
