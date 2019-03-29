@@ -1,5 +1,6 @@
 
-You can show/hide the correct button by using the `auth.isAuthenticated()` method.  In this example,`props.auth` has been provided via the `withAuth` HOC.
+The `Auth` object is provided on the component's props via the `withAuth` Higher Order Component (HOC).
+You can show/hide the correct button by checking the value returned from the `auth.isAuthenticated()` method. 
 
 ```javascript
 

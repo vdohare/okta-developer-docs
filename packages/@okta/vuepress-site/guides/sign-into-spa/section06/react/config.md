@@ -1,25 +1,5 @@
 
-
-```javascript
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-
-class App extends Component {
-  render() {
-    return (
-      <Router>
-        <Security {...config} >
-          { /* child components have access to auth context */ }
-        </Security>
-      </Router>
-    );
-  }
-}
-
-export default App;
-```
-
-Configure a Security component in your top-level component. We provide the `Security` component which makes an Auth object available to child components and the `withAuth` Higher Order Component (HOC). We show you how to set these up below using [React Router DOM](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-dom):
+Configure a Security component in your top-level component. We provide the `Security` component which makes an Auth object available to child components and the `withAuth` Higher Order Component (HOC). We show you how to set these up using [React Router DOM](https://github.com/ReactTraining/react-router/tree/master/packages/react-router-dom):
 
 ```javascript
 
@@ -43,9 +23,13 @@ class App extends Component {
 export default App;
 ```
 
-If you find that your application needs to interact with the Auth object outside of a child component context, you can create the Auth object directly and pass it to the Security component as shown below.
+## Outside components
 
-Note that Auth has a dependency on the 'history' npm module. You should create this history object and pass it as a property to the Auth construxtor object as shown:
+You may find that your application needs to interact with the `Auth` object outside of a child component context. 
+
+In this case, you can create the `Auth` object directly and pass it to the `Security` component.
+
+Note that Auth has a dependency on the `history` npm module. You should create an instance of this history object and pass it as a property to the `Auth` constructor. You should pass this same history object instance to `Router`
 
 ```javascript
 
@@ -65,7 +49,7 @@ class App extends Component {
   render() {
     const { auth } = this.props;
     return (
-      <Router>
+      <Router history={history}>
         <Security auth={auth} >
           { /* App routes go here */ }
         </Security>

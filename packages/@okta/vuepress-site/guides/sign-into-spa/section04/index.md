@@ -16,7 +16,7 @@ Somewhere in your app, construct a config object. This will be used to initializ
 * issuer
 * redirectUri
 
-It could be simple, with hardcoded values:
+It could use hardcoded values:
 
 ```javascript
 const config = {
@@ -26,7 +26,7 @@ const config = {
 };
 ```
 
-Or it can be built from dynamic values:
+Or it could be built from dynamic values:
 
 ```javascript
 const DOMAIN = process.env.DOMAIN;
@@ -45,4 +45,4 @@ const config = {
 
 ```
 
-It is not important how you construct this object, but you will need to create a specific config object for your app to initialize the SDK. We will refer to this `config` object in the following steps
+It is not important how you construct this object, but you will need to create an object with the values specific for your app. This object will be used to initialize the Okta SDK. We will refer to this `config` object throughout the guide.
