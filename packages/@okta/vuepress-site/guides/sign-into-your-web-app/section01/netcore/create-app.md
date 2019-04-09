@@ -1,1 +1,1 @@
-need URL to doc
+<https://docs.microsoft.com/en-us/visualstudio/ide/quickstart-aspnet-core>
