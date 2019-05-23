@@ -35,7 +35,7 @@ This inline hook works only when using custom SAML apps, not apps from the OIN.
 
 The outbound call from Okta to your external service provides you with the contents of the SAML assertion that was generated, which you will be able to augment or modify by means of the commands you return. Also provided is contextual information about the authentication request.
 
-Because SAML is XML-based, but the call from Okta to your service uses a JSON payload, the contents of the SAML assertion are converted to a JSON representation for sending.
+Because SAML is XML-based, but the call from Okta to your service uses a JSON payload, the contents of the SAML assertion are mapped to a JSON representation for sending.
 
 ### data.assertion.subject
 
@@ -155,7 +155,7 @@ When performing an `add` op to add a new attribute statement, this will always b
 
 When modifying an existing assertions statement, the path could begin with `/subject/`, `/authentication/`, `/conditions/`, or `/claims/`, depending on which part of the assertion you want to modify. You then drill down within the child elements using slash-delimited element names, e.g., `/claims/array/attributeValues/1/value`.
 
-## Sample Listing of JSON Payload of Request
+## Sample JSON Payload of Request
 
 ```json
 {
@@ -317,7 +317,7 @@ When modifying an existing assertions statement, the path could begin with `/sub
 }
 ```
 
-## Sample Listing of JSON Payload of Response
+## Sample JSON Payload of Response
 
 ```json
 {
