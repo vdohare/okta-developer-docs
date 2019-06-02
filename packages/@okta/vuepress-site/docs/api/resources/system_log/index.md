@@ -87,6 +87,613 @@ Each LogEvent object describes a single logged action or "event" performed by a 
 
 ### LogEvent Object Annotated Example
 
+<JsonSchema levels=1 v-bind:schema='{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://schema.okta.com/v1/logs/schema.json",
+  "type": "object",
+  "title": "LogEvent Object",
+  "description": "A single logged action or \"event\" performed by a set of actors for a set of targets",
+  "required": [
+    "uuid",
+    "published",
+    "eventType",
+    "version",
+    "severity"
+  ],
+  "properties": {
+    "uuid": {
+      "type": "string",
+      "description": "Unique identifier for an individual event",
+      "distinct": true,
+      "examples": [
+        "61cc6efc-857b-11e9-a8a3-773ed060eb6f"
+      ]
+    },
+    "published": {
+      "type": "string",
+      "description": "ISO8601 string for timestamp",
+      "examples": [
+        "2019-06-02T21:14:17.977Z"
+      ]
+    },
+    "eventType": {
+      "type": "string",
+      "description": "The type of the event.",
+      "examples": [
+        "user.session.access_admin_app"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "description": "The event schema version",
+      "examples": [
+        "0"
+      ]
+    },
+    "severity": {
+      "$id": "#/properties/severity",
+      "type": "string",
+      "enum": [
+        "DEBUG",
+        "INFO",
+        "WARN",
+        "ERROR"
+      ],
+      "description": "Indicates how severe the event is.",
+      "examples": [
+        "INFO"
+      ]
+    },
+    "legacyEventType": {
+      "type": "string",
+      "description": "Associated Events API Action objectType attribute value. See https://developer.okta.com/docs/api/resources/event-types/ for the full mapping.",
+      "examples": [
+        "app.admin.sso.login.success"
+      ]
+    },
+    "displayMessage": {
+      "type": "string",
+      "description": "The display message for an event.",
+      "examples": [
+        "User accessing Okta admin app"
+      ]
+    },
+    "actor": {
+      "$ref": "#/definitions/resource",
+      "title": "Actor Object",
+      "description": "Describes the entity that performed an action."
+    },
+    "client": {
+      "type": "object",
+      "title": "Client Object",
+      "description": "The client that requested an action.",
+      "required": [
+        "userAgent",
+        "zone",
+        "device",
+        "id",
+        "ipAddress",
+        "geographicalContext"
+      ],
+      "properties": {
+        "userAgent": {
+          "type": "object",
+          "title": "UserAgent Object",
+          "description": "In the Okta event data model, the UserAgent object provides specifications about the client software that makes event-triggering HTTP requests. User agent identification is often useful for identifying interoperability problems between servers and clients, and also for browser and operating system usage analytics.",
+          "properties": {
+            "rawUserAgent": {
+              "type": "string",
+              "description": "A raw string representation of the user agent, formatted according to section 5.5.3 of HTTP/1.1 Semantics and Content. Both the browser and the OS fields can be derived from this field.",
+              "examples": [
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+              ]
+            },
+            "os": {
+              "type": "string",
+              "title": "OS",
+              "description": "The Operating System the client runs on.",
+              "examples": [
+                "Mac OS X"
+              ]
+            },
+            "browser": {
+              "type": "string",
+              "description": "If the client is a web browser, this field identifies the type of web browser.",
+              "examples": [
+                "CHROME",
+                "FIREFOX"
+              ]
+            }
+          }
+        },
+        "zone": {
+          "type": "string",
+          "description": "The network zone from where the request was initiated."
+        },
+        "device": {
+          "type": "string",
+          "description": "The device used by the client.",
+          "examples": [
+            "Computer"
+          ]
+        },
+        "id": {
+          "type": "String",
+          "description": "An identifier for the client.",
+          "examples": [
+            null
+          ]
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "The IP address",
+          "examples": [
+            "76.65.31.160"
+          ]
+        },
+        "geographicalContext": {
+          "type": "object",
+          "title": "GeographicalContext Object",
+          "description": "The de-normalized geographical context for this particular client (if available).",
+          "required": [
+            "city",
+            "state",
+            "country",
+            "postalCode",
+            "geolocation"
+          ],
+          "properties": {
+            "city": {
+              "type": "string",
+              "enum": [
+                "Scarborough"
+              ],
+              "title": "The City Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "examples": [
+                "Scarborough"
+              ]
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "Ontario"
+              ],
+              "title": "The State Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "examples": [
+                "Ontario"
+              ]
+            },
+            "country": {
+              "type": "string",
+              "enum": [
+                "Canada"
+              ],
+              "title": "The Country Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "examples": [
+                "Canada"
+              ]
+            },
+            "postalCode": {
+              "type": "string",
+              "enum": [
+                "M1K"
+              ],
+              "title": "The Postalcode Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "examples": [
+                "M1K"
+              ]
+            },
+            "geolocation": {
+              "type": "object",
+              "title": "The Geolocation Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "required": [
+                "lat",
+                "lon"
+              ],
+              "properties": {
+                "lat": {
+                  "type": "number",
+                  "title": "The Lat Schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "examples": [
+                    43.7298
+                  ]
+                },
+                "lon": {
+                  "type": "number",
+                  "title": "The Lon Schema",
+                  "examples": [
+                    -79.2639
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "outcome": {
+      "$id": "#/properties/outcome",
+      "type": "object",
+      "title": "Outcome Object",
+      "description": "The outcome of an action.",
+      "required": [
+        "result",
+        "reason"
+      ],
+      "properties": {
+        "result": {
+          "type": "string",
+          "enum": [
+            "SUCCESS"
+          ],
+          "title": "The Result Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            "SUCCESS"
+          ]
+        },
+        "reason": {
+          "type": "null",
+          "title": "The Reason Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            null
+          ]
+        }
+      }
+    },
+    "target": {
+      "type": "array",
+      "title": "Target Object",
+      "description": "Zero or more targets of an action.",
+      "items": {
+        "description": "Target of an action.",
+        "$ref": "#/definitions/resource"
+      }
+    },
+    "transaction": {
+      "type": "object",
+      "title": "Transaction Object",
+      "description": "The transaction details of an action.",
+      "required": [
+        "type",
+        "id",
+        "detail"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "WEB"
+          ],
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            "WEB"
+          ]
+        },
+        "id": {
+          "type": "string",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            "XPQ8KR2yPqHhIQRESIgrcAAAAUg"
+          ]
+        },
+        "detail": {
+          "$ref": "#/definitions/details",
+          "description": "An explanation about the purpose of this instance."       
+        }
+      }
+    },
+    "debugContext": {
+      "type": "object",
+      "title": "DebugContext Object",
+      "description": "The debug request data of an action.",
+      "required": [
+        "debugData"
+      ],
+      "properties": {
+        "debugData": {
+          "$ref": "#/definitions/details",
+          "title": "DebugData Object",
+          "description": "If for some reason the information needed to implement a feature is not provided in other response objects, it is advised to scan the debugContext.debugData field for potentially useful fields."
+        }
+      }
+    },
+    "authenticationContext": {
+      "type": "object",
+      "title": "AuthenticationContext Object",
+      "description": "The authentication data of an action.",
+      "required": [
+        "authenticationProvider",
+        "credentialProvider",
+        "credentialType",
+        "issuer",
+        "interface",
+        "authenticationStep",
+        "externalSessionId"
+      ],
+      "properties": {
+        "authenticationProvider": {
+          "type": "null",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            null
+          ]
+        },
+        "credentialProvider": {
+          "type": "null",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            null
+          ]
+        },
+        "credentialType": {
+          "type": "null",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            null
+          ]
+        },
+        "issuer": {
+          "type": "null",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            null
+          ]
+        },
+        "interface": {
+          "type": "null",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            null
+          ]
+        },
+        "authenticationStep": {
+          "type": "integer",
+          "const": [
+            0
+          ],
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            0
+          ]
+        },
+        "externalSessionId": {
+          "type": "string",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            "102CGafzjjNTlWAVqg1zayS-Q"
+          ]
+        }
+      }
+    },
+    "securityContext": {
+      "type": "object",
+      "title": "SecurityContext Object",
+      "description": "The security data of an action.",
+      "required": [
+        "asNumber",
+        "asOrg",
+        "isp",
+        "domain",
+        "isProxy"
+      ],
+      "properties": {
+        "asNumber": {
+          "type": "null",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            null
+          ]
+        },
+        "asOrg": {
+          "type": "null",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            null
+          ]
+        },
+        "isp": {
+          "type": "null",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            null
+          ]
+        },
+        "domain": {
+          "type": "null",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            null
+          ]
+        },
+        "isProxy": {
+          "type": "null",
+          "description": "An explanation about the purpose of this instance.",
+          "examples": [
+            null
+          ]
+        }
+      }
+    },
+    "request": {
+      "type": "object",
+      "title": "Request Object",
+      "description": "The request object describes details related to the HTTP request that triggers this event, if available. When the event is not sourced to an http request, such as in the case of an automatic update on the Okta servers, the Request object will still exist, but the ipChain field will be empty.",
+      "required": [
+        "ipChain"
+      ],
+      "properties": {
+        "ipChain": {
+          "type": "array",
+          "title": "The Ipchain Schema",
+          "description": "If the incoming request passes through any proxies, the IP addresses of those proxies will be stored here in the format (clientIp, proxy1, proxy2, ...). This field is useful when working with trusted proxies.",
+          "items": {
+            "type": "object",
+            "title": "The Items Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "required": [
+              "ip",
+              "geographicalContext",
+              "version",
+              "source"
+            ],
+            "properties": {
+              "ip": {
+                "type": "string",
+                "description": "An explanation about the purpose of this instance.",
+                "examples": [
+                  "76.65.31.160"
+                ]
+              },
+              "geographicalContext": {
+                "type": "object",
+                "title": "eographicalContext Object",
+                "description": "An explanation about the purpose of this instance.",
+                "required": [
+                  "city",
+                  "state",
+                  "country",
+                  "postalCode",
+                  "geolocation"
+                ],
+                "properties": {
+                  "city": {
+                    "type": "string",
+                    "title": "The City Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "examples": [
+                      "Scarborough"
+                    ]
+                  },
+                  "state": {
+                    "type": "string",
+                    "title": "The State Schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "examples": [
+                      "Ontario"
+                    ]
+                  },
+                  "country": {
+                    "type": "string",
+                    "description": "An explanation about the purpose of this instance.",
+                    "examples": [
+                      "Canada"
+                    ]
+                  },
+                  "postalCode": {
+                    "type": "string",
+                    "description": "An explanation about the purpose of this instance.",
+                    "examples": [
+                      "M1K"
+                    ]
+                  },
+                  "geolocation": {
+                    "type": "object",
+                    "title": "Geolocation Object",
+                    "description": "An explanation about the purpose of this instance.",
+                    "required": [
+                      "lat",
+                      "lon"
+                    ],
+                    "properties": {
+                      "lat": {
+                        "type": "number",
+                        "description": "An explanation about the purpose of this instance.",
+                        "examples": [
+                          43.7298
+                        ]
+                      },
+                      "lon": {
+                        "type": "number",
+                        "description": "An explanation about the purpose of this instance.",
+                        "examples": [
+                          -79.2639
+                        ]
+                      }
+                    }
+                  }
+                }
+              },
+              "version": {
+                "type": "string",
+                "description": "An explanation about the purpose of this instance.",
+                "examples": [
+                  "V4"
+                ]
+              },
+              "source": {
+                "type": "null",
+                "description": "An explanation about the purpose of this instance.",
+                "examples": [
+                  null
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "details": {
+      "type": "object",
+      "title": "Details Object",
+      "description": "A dynamic details data structure.",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "$ref": "#/definitions/resource"
+          }
+        ]
+      }
+    },
+    "resource": {
+      "type": "object",
+      "title": "Resource Object",
+      "description": "A resource.",
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the resource."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of the resource."
+        },
+        "alternateId": {
+          "type": "string",
+          "description": "An alternative unique identifier for the resource (might be non-opaque such as username / app name)."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "A human readable display name for the resource."
+        },
+        "detailEntry": {
+          "type": "object",
+          "description": "A flat map of properties describing any further details about the resource.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}'/>
+
 ```html
 {
 "uuid": Randomly generated String, Required
